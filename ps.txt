@@ -1,0 +1,66 @@
+Get-Item -Path Registry::HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion
+等同于： ls hklm:\SOFTWARE\Microsoft\Windows\CurrentVersion
+
+C:\PS> ipconfig | select-string -pattern 255
+Subnet Mask . . . . . . . . . . . : 255.255.252.0
+C:\PS> ipconfig | findstr "Address"
+        IP Address. . . . . . . . . . . . : 172.28.21.5
+        IP Address. . . . . . . . . . . . : 172.30.160.225
+
+get-alias 取得别名
+$env:path 环境变量：路径
+
+msconfig.exe
+
+[string]::format("xxx {0} nnn {1}",12,15)
+
+PS C:\> "我是第三行,让我跟在第二行后面吧!!!" | Out-File -Append append.txt
+
+tasklist 进程清单
+
+查看服务详情 get-wmiobject win32_service -filter "name = 'eventlog'"   ,   get-wmiobject win32_service -filter "name = 'eventlog'"|gm
+查看服务启动模式 get-wmiobject win32_service | format-table Name, StartMode
+
+网络用户名和密码使用：
+$c=Get-Credential gyop
+$c.GetNetworkCredential().UserName
+$c.GetNetworkCredential().Password
+
+Get-Help get* | select Category -Unique
+
+C:\PS>get-childitem C:\ | foreach-object -process { $_.length / 1024 }
+此命令检索 C: 驱动器的根目录中的文件和目录，然后返回并显示它们每一项的大小。零表示其中文件大小不可用的目录
+
+C:\PS>$events = get-eventlog -logname system -newest 1000
+C:\PS> $events | foreach-object -begin {get-date} -process {out-file -filepath events.txt -append -inputobject $_.message} -end {get-date}
+此命令从系统日志中检索 1000 个最近事件，并将它们存储在 $events 变量中。然后，通过管道将事件传递给 ForEach-Object cmdlet。Begin 参数显示当前日期和时间。接着，Process 参数使用 Out-File cmdlet 来创建名为 events.txt 的文本文件，并将每个事件的消息属性存储在该文件中。最后，在完成所有处理之后，使用 End 参数显示日期和时间。
+
+
+set-item wsman:localhost\client\trustedhosts -value * 命令 设置信任主机
+winrm quickconfig
+
+PS C:\PowerShell> (Get-Date).gettype().name
+DateTime
+
+写入文件
+PS C:\> $code = @"
+>> Write-Host "Hello World!!"
+>> "@
+>>
+PS C:\> Set-Content hello-world.ps1 $code
+PS C:\> type hello-world.ps1
+Write-Host "Hello World!!"
+
+
+
+
+$ie=New-object –comobject internetexplorer.application
+Get-process
+$ie.visible=$true
+$ie.navigate(“http://www.sohu.com”)
+$ie.quit()
+
+
+
+
+
